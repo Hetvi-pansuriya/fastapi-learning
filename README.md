@@ -12,9 +12,9 @@ A REST API for tracking expenses with:
 - POST /expenses — Adds a new expense with validation
 
 ## How to run
-pip install fastapi uvicorn
-cd first-api
-uvicorn main:app --reload
+- pip install fastapi uvicorn
+- cd first-api
+- uvicorn main:app --reload
 
 ## Test the API
 Open http://127.0.0.1:8000/docs in browser
@@ -25,9 +25,12 @@ Day 1:
 - Creating a FastAPI app
 - Defining GET routes
 - Automatic Swagger docs at /docs
+<<<<<<< HEAD
 
 Day 2:
 - POST requests
 - Pydantic models for data validation
 - Storing data in memory using a list
 - Testing API with Swagger UI
+=======
+>>>>>>> 162138a3756f7ddb28d648a1d55912c0cb48726d
