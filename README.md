@@ -25,7 +25,6 @@ Day 1:
 - Creating a FastAPI app
 - Defining GET routes
 - Automatic Swagger docs at /docs
-<<<<<<< HEAD
 
 Day 2:
 - POST requests
