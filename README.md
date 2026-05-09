@@ -32,5 +32,3 @@ Day 2:
 - Pydantic models for data validation
 - Storing data in memory using a list
 - Testing API with Swagger UI
-=======
->>>>>>> 162138a3756f7ddb28d648a1d55912c0cb48726d
