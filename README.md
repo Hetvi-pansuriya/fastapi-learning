@@ -10,6 +10,8 @@ A REST API for tracking expenses with:
 - GET / — Home route
 - GET /expenses — Returns all expenses
 - POST /expenses — Adds a new expense with validation
+- GET /expenses/{category} — Returns expenses by category
+- DELETE /expenses/{index} — Deletes an expense by index
 
 ## How to run
 - pip install fastapi uvicorn
@@ -31,3 +33,7 @@ Day 2:
 - Pydantic models for data validation
 - Storing data in memory using a list
 - Testing API with Swagger UI
+
+Day 3:
+- Path parameters
+- DELETE route
