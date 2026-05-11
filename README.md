@@ -37,3 +37,6 @@ Day 2:
 Day 3:
 - Path parameters
 - DELETE route
+
+Day 4:
+- UPDATE route
