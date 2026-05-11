@@ -36,3 +36,13 @@ def delete_expense(index:int): #FastAPI takes the number from the URL and passes
         removed=expenses.pop(index) #pop(index) removes the item at that position from the lis
         return {"message": "Expense Deleted", "expense": removed} 
     return {"message" : "Invalid Index"}
+
+@app.put("/expenses/{index}") #This defines an UPDATE route, {index} is path parameter 
+def update_expense(index:int, update_expense:Expense): #
+    if index < len(expenses): # check if the index is valid
+        expenses[index]=update_expense.dict() #takes index from url and update expense data following Expense model
+        return {
+            "message":"Expense Updated", #notify that data updated
+            "expense":expenses[index] #send updated data
+        }
+    return {"message":"Invalid Index"}
