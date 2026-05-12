@@ -40,3 +40,8 @@ Day 3:
 
 Day 4:
 - UPDATE route
+
+Day 5:
+- Revised complete CRUD operations
+- Practiced GET, POST, PUT and DELETE routes
+- Improved understanding of path parameters
