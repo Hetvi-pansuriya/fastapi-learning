@@ -23,7 +23,7 @@ def get_expenses():
 @app.post("/expenses") #accept post request
 def add_expenses(expense: Expense): 
     expenses.append(expense.dict()) #convert the Expense object to a dictionary and add it to your list.
-    return {"message": "Expense Added", "expense": expense}
+    return {"message": "Expense Added",  "expense": expense}
 
 @app.get("/expenses/{category}") #{category}: path parameter
 def get_by_category(category:str): #FastAPI automatically takes the value from the URL and passes it to this function as category
