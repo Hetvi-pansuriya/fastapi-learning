@@ -45,3 +45,8 @@ Day 5:
 - Revised complete CRUD operations
 - Practiced GET, POST, PUT and DELETE routes
 - Improved understanding of path parameters
+
+Day 6:
+- SQLAlchemy installed
+- Database setup file created
+- SQLite database connection configured
