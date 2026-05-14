@@ -1,14 +1,27 @@
-from fastapi import FastAPI #importing fastapi library
+from fastapi import FastAPI, Depends #importing fastapi library
 from pydantic import BaseModel #importing BaseModel class from pydantic libraray : it defines what shape data should look like
+from sqlalchemy.orm import Session
+import models
+from database import engine, SessionLocal
+
+models.Base.metadata.create_all(bind=engine) # create table in database
 
 app = FastAPI() #creating application
 
-expenses=[] #list store expenses in memory, when restart server it resets to empty
-
-class Expense(BaseModel): #shpe of expense
-    category: str
-    price: float
+#pydantic schema for request validation
+class ExpenseSchema(BaseModel):
+    category:str
+    price:float
     date:str
+
+def get_db():
+    db=SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# expenses=[] #list store expenses in memory, when restart server it resets to empty
 
 @app.get("/") #decorator- it tells fastapi when someone visit "/" url
 
@@ -17,32 +30,51 @@ def home():
 
 
 @app.get("/expenses") #when someone visit "/expenses" url, returns expenses list
-def get_expenses():
+def get_expenses(db: Session=Depends(get_db)):
+    expenses=db.query(models.Expense).all()
     return {"expenses":expenses}
 
 @app.post("/expenses") #accept post request
-def add_expenses(expense: Expense): 
-    expenses.append(expense.dict()) #convert the Expense object to a dictionary and add it to your list.
-    return {"message": "Expense Added",  "expense": expense}
+def add_expenses(expense: ExpenseSchema, db: Session=Depends(get_db)): 
+    new_expense=models.Expense(
+        category=expense.category,
+        price=expense.price,
+        date=expense.date
+    )
+    db.add(new_expense)
+    db.commit()
+    db.refresh(new_expense)
+
+    return {"message": "Expense Added",  "expense": new_expense}
+
 
 @app.get("/expenses/{category}") #{category}: path parameter
-def get_by_category(category:str): #FastAPI automatically takes the value from the URL and passes it to this function as category
-    result=[e for e in expenses if e["category"].lower()==category.lower()] # list comprehension, loop through every expenses of list, check if expense category matches with requested
-    return {"expenses":result}
+def get_by_category(category:str, db: Session=Depends(get_db)): #FastAPI automatically takes the value from the URL and passes it to this function as category
+    expenses=db.query(models.Expense).filter(
+        models.Expense.category.ilike(category)
+    ).all()
+    return {"expenses":expenses}
 
-@app.delete("/expenses/{index}") #This defines a DELETE route, {index} is a path parameter
-def delete_expense(index:int): #FastAPI takes the number from the URL and passes it to this function as index
-    if index < len(expenses): # check if the index is valid
-        removed=expenses.pop(index) #pop(index) removes the item at that position from the lis
-        return {"message": "Expense Deleted", "expense": removed} 
+@app.delete("/expenses/{id}") #This defines a DELETE route, {index} is a path parameter
+def delete_expense(id:int, db: Session=Depends(get_db)): #FastAPI takes the number from the URL and passes it to this function as index
+    expense=db.query(models.Expense).filter(models.Expense.id == id).first()
+    if expense:
+        db.delete(expense)
+        db.commit()
+        return {"message": "Expense Deleted", "expense": expense} 
     return {"message" : "Invalid Index"}
 
-@app.put("/expenses/{index}") #This defines an UPDATE route, {index} is path parameter 
-def update_expense(index:int, update_expense:Expense): #
-    if index < len(expenses): # check if the index is valid
-        expenses[index]=update_expense.dict() #takes index from url and update expense data following Expense model
+@app.put("/expenses/{id}") #This defines an UPDATE route, {index} is path parameter 
+def update_expense(id:int, updated: ExpenseSchema,db: Session= Depends(get_db)): 
+    expense=db.query(models.Expense).filter(models.Expense.id==id).first()
+    if expense:
+        expense.category=updated.category
+        expense.price=updated.price
+        expense.date=updated.date
+        db.commit()
+        db.refresh(expense)
         return {
             "message":"Expense Updated", #notify that data updated
-            "expense":expenses[index] #send updated data
+            "expense":expense #send updated data
         }
-    return {"message":"Invalid Index"}
+    return {"message":"Expense not found"}
