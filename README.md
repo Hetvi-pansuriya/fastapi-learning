@@ -29,10 +29,10 @@ uvicorn main:app --reload
 Open http://127.0.0.1:8000/docs in browser
 
 ## What I Learned
-Day 1: FastAPI setup, GET routes, Swagger docs
-Day 2: POST requests, Pydantic models, in-memory storage
-Day 3: Path parameters, DELETE route
-Day 4: PUT route, complete CRUD
-Day 5: Revised all CRUD operations
-Day 6: SQLAlchemy, SQLite database connection setup
-Day 7: Complete database integration, data persistence, gitignore, requirements
+- Day 1: FastAPI setup, GET routes, Swagger docs
+- Day 2: POST requests, Pydantic models, in-memory storage
+- Day 3: Path parameters, DELETE route
+- Day 4: PUT route, complete CRUD
+- Day 5: Revised all CRUD operations
+- Day 6: SQLAlchemy, SQLite database connection setup
+- Day 7: Complete database integration, data persistence, gitignore, requirements
